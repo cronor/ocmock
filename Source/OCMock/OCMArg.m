@@ -9,6 +9,8 @@
 #import "OCMPassByRefSetter.h"
 #import "OCMConstraint.h"
 
+NSString * const kSelectorThatMatchesAnySelectorName = @"aSelectorThatMatchesAnySelector";
+
 @implementation OCMArg
 
 + (id)any
@@ -28,7 +30,7 @@
 
 + (SEL)anySelector
 {
-    return @selector(aSelectorThatMatchesAnySelector);
+    return NSSelectorFromString(kSelectorThatMatchesAnySelectorName);
 }
 
 + (id)isNil
@@ -87,7 +89,7 @@
     {
         SEL selector;
         [value getValue:&selector];
-        if(selector == @selector(aSelectorThatMatchesAnySelector))
+        if(selector == NSSelectorFromString(kSelectorThatMatchesAnySelectorName))
             return [OCMArg any];
     }
 	return value;

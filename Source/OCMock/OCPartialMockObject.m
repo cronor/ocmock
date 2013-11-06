@@ -8,6 +8,7 @@
 #import "OCPartialMockObject.h"
 #import "NSMethodSignature+OCMAdditions.h"
 
+extern NSString * const kMethodThatMustNotExistSelectorName;
 
 @interface OCPartialMockObject (Private)
 - (void)forwardInvocationForRealObject:(NSInvocation *)anInvocation;
@@ -141,9 +142,9 @@ static NSMutableDictionary *mockTable;
     // TODO: below we shouldn't really use getTypeEncoding because that doesn't work for methods implemented with -forwardingTargetForSelector:
 	IMP forwarderImp;
 	if([signature usesSpecialStructureReturn])
-		forwarderImp = class_getMethodImplementation_stret(subclass, @selector(aMethodThatMustNotExist));
+		forwarderImp = class_getMethodImplementation_stret(subclass, NSSelectorFromString(kMethodThatMustNotExistSelectorName));
 	else
-		forwarderImp = class_getMethodImplementation(subclass, @selector(aMethodThatMustNotExist));
+		forwarderImp = class_getMethodImplementation(subclass, NSSelectorFromString(kMethodThatMustNotExistSelectorName));
 	class_addMethod(subclass, method_getName(originalMethod), forwarderImp, method_getTypeEncoding(originalMethod));
 
 	SEL aliasSelector = NSSelectorFromString([OCMRealMethodAliasPrefix stringByAppendingString:NSStringFromSelector(selector)]);
